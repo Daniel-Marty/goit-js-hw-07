@@ -1,6 +1,4 @@
 import { galleryItems } from './gallery-items.js';
-// Change code below this line
-console.log(galleryItems);
 
 const galleryContainer = document.querySelector('.gallery');
 const cardsMarkup = createGallery(galleryItems);
@@ -9,7 +7,7 @@ galleryContainer.insertAdjacentHTML('beforeend', cardsMarkup)
 galleryContainer.addEventListener('click', onImageClick);
 
 function createGallery(galleryItems) {
-    return galleryItems
+  return galleryItems
         .map(({ preview, description, original }) => {
             return `
         <div class="gallery__item">
@@ -24,31 +22,37 @@ function createGallery(galleryItems) {
         })
         .join('');
 }
+let instance = false
 
-// function onImageClick(e) {
-//     e.preventDefault();
+function onImageClick(evt) {
+  evt.preventDefault();
   
-        
-//     }
-//     console.log(e.target);
-// }
-let basicLightbox;
-function onImageClick(e) {
-    e.preventDefault();
-    // if (e.target.nodeName !== "IMG") {
-    //     return;
-    // }
-  const instance = basicLightbox.create(`
-    <img src="${evt.target.dataset.source}" width="800" height="600">`)
-    instance.show();
+  if (evt.target.nodeName !== 'IMG') {
+    return;
+  }
+  
+  instance = basicLightbox.create(`
+     <div class="modal">
+         <img src="${evt.target.src}" alt="IMG" width="800" height="600">
+     </div>
+     `)
+  instance.show();
 }
+
 function onCloseModal() {
   window.removeEventListener("keydown", onEscKeyModal);
-  document.body.classList.close(".basicLightbox--visible");
+  let l = document.querySelector('.basicLightbox--visible')
+  l.classList.remove('basicLightbox--visible')
 }
+
+window.addEventListener('keydown', onEscKeyModal)
+
 function onEscKeyModal(event) {
   if (event.code === "Escape") {
-    onCloseModal();
+    //onCloseModal();
+    instance.close()
   }
 }
+
+
 
